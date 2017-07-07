@@ -1,0 +1,8 @@
+﻿  time.cpp
+  main.cpp
+  graphics.cpp
+  C_Application.cpp
+  Generating Code...
+C_Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  test.vcxproj -> C:\Users\Izzy\Documents\Repositories\ProgramTests\H13Test\code\Debug\test.exe
+  test.vcxproj -> C:\Users\Izzy\Documents\Repositories\ProgramTests\H13Test\code\Debug\test.pdb (Full PDB)
