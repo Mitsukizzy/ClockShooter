@@ -1,5 +1,10 @@
 ﻿  Projectile.cpp
 c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(42): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(14): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(21): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(33): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(34): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\projectile.cpp(47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   test.vcxproj -> C:\Users\Izzy\Documents\Repositories\ClockShooter\code\Debug\test.exe
   test.vcxproj -> C:\Users\Izzy\Documents\Repositories\ClockShooter\code\Debug\test.pdb (Full PDB)

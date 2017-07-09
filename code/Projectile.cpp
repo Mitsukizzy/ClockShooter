@@ -11,39 +11,44 @@ Projectile::Projectile(int locX, int locY, double rotAngle)
 	, m_Angle(rotAngle)
 {
 	// Set laser spawn position
-	m_LaserX = m_AnchorX;
-	m_LaserY = m_AnchorY - 50;
+	m_SpawnY = m_AnchorY - 16;
 }
 
 
 Projectile::~Projectile()
 {
-
+	// Clear projectile line draw when destroyed
+	DrawLine(m_X1, m_Y1, m_X2, m_Y2, GetRGB( 0, 0, 0 ));
 }
 
 void Projectile::Update()
 {
 	// Clear previous projectile line draw from screen
-	FillRect( m_LaserX - 10, m_LaserY-50, 21, 51, GetRGB( 0, 0, 0 ) );
-	//m_LaserX -= 1;
-	m_LaserY -= 1;
+	DrawLine(m_X1, m_Y1, m_X2, m_Y2, GetRGB( 0, 0, 0 ));
 
-	std::cout << m_LaserX << ", " << m_LaserY << std::endl;
+	// Move spawn upwards
+	m_SpawnY -= 0.05f;
 
-	double anchoredX1 = m_LaserX - m_AnchorX;
-	double anchoredY1 = m_LaserY - m_AnchorY;
-	double anchoredX2 = m_LaserX - m_AnchorX;
-	double anchoredY2 = (m_LaserY-50) - m_AnchorY;
+	int anchoredX = 0;
+	int anchoredY1 = m_SpawnY - m_AnchorY;
+	int anchoredY2 = (m_SpawnY - m_length) - m_AnchorY;
+
+	// Precalculate the sin and cos of the angle
+	float sinAngle = sin(m_Angle);
+	float cosAngle = cos(m_Angle);
 	
-	double x1 = (anchoredX1 * cos(m_Angle)) - ((anchoredY1) * sin(m_Angle));
-	double y1 = (anchoredX1 * sin(m_Angle)) + ((anchoredY1)* cos(m_Angle));
-	double x2 = ((anchoredX2) * cos(m_Angle)) - ((anchoredY2) * sin(m_Angle));
-	double y2 = ((anchoredX2) * sin(m_Angle)) + ((anchoredY2) * cos(m_Angle));
-	DrawLine(m_AnchorX + x1, m_AnchorY + y1, m_AnchorX + x2, m_AnchorY + y2, GetRGB( 255, 255, 255 ));
-	//DrawLine( m_LaserX, m_LaserY-20, m_LaserX, m_LaserY+20, GetRGB( 255, 255, 255 ) );
+	// Rotate each point and add back the corresponding anchor
+	m_X1 = (anchoredX * cosAngle) - (anchoredY1 * sinAngle) + m_AnchorX;
+	m_Y1 = (anchoredX * sinAngle) + (anchoredY1 * cosAngle) + m_AnchorY;
+	m_X2 = (anchoredX * cosAngle) - (anchoredY2 * sinAngle) + m_AnchorX;
+	m_Y2 = (anchoredX * sinAngle) + (anchoredY2 * cosAngle) + m_AnchorY;
+
+	// Draw the projectile
+	DrawLine(m_X1, m_Y1, m_X2, m_Y2, GetRGB( 255, 255, 255 ));
+	//std::cout << m_X1 << ", " << m_Y1 << " | " << m_X2 << " , " << m_Y2  << std::endl;
 }
 
 bool Projectile::CheckOffscreen(const int screenWidth, const int screenHeight)
 {
-	return ( m_LaserX < 0 || m_LaserX > screenWidth || m_LaserY < -30 || m_LaserY > screenHeight );
+	return ( m_X2 < 0 || m_X1 > screenWidth || m_Y2 < 0 || m_Y1 > screenHeight );
 }
