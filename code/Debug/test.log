@@ -1,4 +1,5 @@
-﻿  C_Application.cpp
+﻿  Projectile.cpp
+  C_Application.cpp
 c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(27): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(240): note: see declaration of 'freopen'
@@ -6,12 +7,14 @@ c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(28): wa
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(240): note: see declaration of 'freopen'
 c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(29): warning C4996: 'freopen': This function or variable may be unsafe. Consider using freopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(240): note: see declaration of 'freopen'
-c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(102): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(103): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(113): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(114): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(75): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(104): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(105): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(115): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(116): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(117): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(117): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(118): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\izzy\documents\repositories\clockshooter\code\c_application.cpp(119): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
   test.vcxproj -> C:\Users\Izzy\Documents\Repositories\ClockShooter\code\Debug\test.exe
   test.vcxproj -> C:\Users\Izzy\Documents\Repositories\ClockShooter\code\Debug\test.pdb (Full PDB)

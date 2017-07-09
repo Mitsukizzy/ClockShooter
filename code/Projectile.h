@@ -6,21 +6,14 @@ class Projectile
 {
 public:
 
-	typedef unsigned int T_PressedKey;
-
 	Projectile(int locX, int locY, float rotAngle);
 	~Projectile();
 
 	void Update();
+	int	m_LaserX;
+	int	m_LaserY;
 
 private:
-
-	//const int	m_ScreenWidth;
-	//const int	m_ScreenHeight;
-
-	// Members for sample tick
-	int			m_LaserX;
-	int			m_LaserY;
 
 	float m_Angle;
 

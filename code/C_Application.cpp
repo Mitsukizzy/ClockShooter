@@ -66,16 +66,17 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 		m_CannonY = min(m_ScreenHeight, m_CannonY+4);
 	}
 
+	//std::cout << "DEGRot: " << m_RotAngle << std::endl;
+	double rotInRad = (double) m_RotAngle * k_PI / 180.0;
+
 	if(pressedKeys & s_KeySpace)
 	{
 		// Fire projectile
-		Projectile p = Projectile(m_CannonX, m_CannonY, m_RotAngle);
+		Projectile p = Projectile(m_CannonX, m_CannonY, rotInRad);
 		projectiles.push_back(p);		
+		//std::cout << "PROJECTILE COUNT: " << projectiles.size() << std::endl;
 	}
 
-	UpdateProjectiles();
-	std::cout << "DEGRot: " << m_RotAngle << std::endl;
-	double rotInRad = (double) m_RotAngle * k_PI / 180.0;
 
 	// Draw cannon
 
@@ -86,12 +87,13 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	//DrawLine(m_CannonX,    m_CannonY,    m_CannonX-10, m_CannonY+30, GetRGB(255,   0,   0));
 	//DrawLine(m_CannonX,    m_CannonY,    m_CannonX+10, m_CannonY+30, GetRGB(  0, 255,   0));
 	//DrawLine(m_CannonX-10, m_CannonY+30, m_CannonX+10, m_CannonY+30, GetRGB(  0,   0, 255));
+	UpdateProjectiles();
 }
 
 
 void C_Application::UpdateProjectiles()
 {
-	for (Projectile p : projectiles)
+	for (Projectile &p : projectiles)
 	{
 		p.Update();
 	}
@@ -107,9 +109,9 @@ void C_Application::DrawCannonLine(int inX1, int inY1, int inX2, int inY2, doubl
 	float anchoredX2 = inX2 - pivotX;
 	float anchoredY2 = inY2 - pivotY;
 
-	std::cout << inX1 << " " << inY1 << " ";
-	std::cout << inX2 << " " << inY2 << " ";
-	std::cout << "RADRot: " << rot << std::endl;
+	//std::cout << inX1 << " " << inY1 << " ";
+	//std::cout << inX2 << " " << inY2 << " ";
+	//std::cout << "RADRot: " << rot << std::endl;
 	float x1 = (anchoredX1 * cos(rot)) - (anchoredY1 * sin(rot));
 	float y1 = (anchoredX1 * sin(rot)) + (anchoredY1 * cos(rot));
 	float x2 = ((anchoredX2) * cos(rot)) - ((anchoredY2) * sin(rot));
