@@ -6,15 +6,18 @@ class Projectile
 {
 public:
 
-	Projectile(int locX, int locY, float rotAngle);
+	Projectile(int locX, int locY, double rotAngle);
 	~Projectile();
 
 	void Update();
-	int	m_LaserX;
-	int	m_LaserY;
+	bool CheckOffscreen(const int screenWidth, const int screenHeight);
 
 private:
-
+	
+	int m_AnchorX;
+	int m_AnchorY;
+	int	m_LaserX;
+	int	m_LaserY;
 	float m_Angle;
 
 };
