@@ -67,7 +67,7 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	}
 
 	//std::cout << "DEGRot: " << m_RotAngle << std::endl;
-	double rotInRad = (double) m_RotAngle * k_PI / 180.0;
+	float rotInRad = (float) m_RotAngle * k_PI / 180.0;
 
 	if(pressedKeys & s_KeySpace)
 	{

@@ -1,11 +1,12 @@
 #include "Projectile.h"
-#include "graphics.h"
-#include "time.h"
-#include <math.h> // for cos and sin
-#include <iostream>
+#include "graphics.h"	// for DrawLine
+#include <math.h>		// for cos and sin
+#include <iostream>	//REMOVE
+
+#define LENGTH 50
 
 
-Projectile::Projectile(int locX, int locY, double rotAngle)
+Projectile::Projectile(int locX, int locY, float rotAngle)
 	: m_AnchorX(locX)
 	, m_AnchorY(locY+15)
 	, m_Angle(rotAngle)
@@ -31,7 +32,7 @@ void Projectile::Update()
 
 	int anchoredX = 0;
 	int anchoredY1 = m_SpawnY - m_AnchorY;
-	int anchoredY2 = (m_SpawnY - m_length) - m_AnchorY;
+	int anchoredY2 = (m_SpawnY - LENGTH) - m_AnchorY;
 
 	// Precalculate the sin and cos of the angle
 	float sinAngle = sin(m_Angle);
