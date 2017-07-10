@@ -76,7 +76,7 @@ public:
 		return Vector2( a.x * b.x, a.y * b.y);
 	}
 
-	friend Vector2 operator*( const Vector2 a, const int b )
+	friend Vector2 operator*( const Vector2 a, const float b )
 	{
 		return Vector2(a.x * b, a.y * b);
 	}

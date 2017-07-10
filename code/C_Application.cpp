@@ -23,10 +23,10 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 	m_RotAngle = 0;
 
 	// Init two clocks
-	//Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight);
-	//Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight);
-	//clocks.push_back(c1);
-	//clocks.push_back(c2);		
+	Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight);
+	Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight);
+	clocks.push_back(c1);
+	clocks.push_back(c2);		
 	
 	// FOR DEBUG
 	AllocConsole();
@@ -99,7 +99,6 @@ void C_Application::UpdateProjectiles()
 	while ( iter != projectiles.end() )
 	{
 		(*iter).Update();
-		std::cout << "UPDATE" << std::endl;
 
 		// Delete projectile if off screen
 		if ( (*iter).CheckOffscreen(m_ScreenWidth, m_ScreenWidth) )
@@ -109,11 +108,11 @@ void C_Application::UpdateProjectiles()
 	}
 
 	// Update clocks
-	//auto iter2 = clocks.begin();
-	//while ( iter2 != clocks.end() )
-	//{
-	//	( *iter2 ).Update();
-	//}
+	auto iter2 = clocks.begin();
+	while ( iter2 != clocks.end() )
+	{
+		( *iter2 ).Update();
+	}
 }
 
 void C_Application::DrawCannonLine(int inX1, int inY1, int inX2, int inY2, double rot, unsigned int color)
@@ -126,9 +125,8 @@ void C_Application::DrawCannonLine(int inX1, int inY1, int inX2, int inY2, doubl
 	float anchoredX2 = inX2 - anchorX;
 	float anchoredY2 = inY2 - anchorY;
 
-	//std::cout << inX1 << " " << inY1 << " ";
-	//std::cout << inX2 << " " << inY2 << " ";
-	//std::cout << "RADRot: " << rot << std::endl;
+	//std::cout << inX1 << " " << inY1 << " " << inX2 << " " << inY2 << " " << "RADRot: " << rot << std::endl;
+
 	float x1 = (anchoredX1 * cos(rot)) - (anchoredY1 * sin(rot));
 	float y1 = (anchoredX1 * sin(rot)) + (anchoredY1 * cos(rot));
 	float x2 = ((anchoredX2) * cos(rot)) - ((anchoredY2) * sin(rot));

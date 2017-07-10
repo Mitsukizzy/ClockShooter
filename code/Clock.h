@@ -2,6 +2,8 @@
 #ifndef TEST_CLOCK_H
 #define TEST_CLOCK_H
 
+#include "Utils.h"
+
 class Clock
 {
 public:
@@ -12,8 +14,8 @@ public:
 	void Update();
 
 	void DrawRing();
-	void DrawHour();
-	void DrawMinute();
+	void DrawHour(int hour);
+	void DrawMinute(int min);
 	void CheckCollision();
 
 private:
@@ -23,7 +25,10 @@ private:
 
 	int m_LocX;
 	int m_LocY;
-	int m_Speed;
+	float m_Speed;
+
+	Vector2 m_Pos;		// Center point of the clock
+	Vector2 m_Dir;		// Direction the clock is moving
 
 	bool m_IsSmall;
 };
