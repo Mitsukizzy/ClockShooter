@@ -1,6 +1,7 @@
 #ifndef TEST_C_APPLICATION_H
 #define TEST_C_APPLICATION_H
 #include "Projectile.h"
+#include "Clock.h"
 #include <vector>
 
 
@@ -36,6 +37,7 @@ private:
 	int			m_CannonY;
 
 	std::vector<Projectile> projectiles;
+	std::vector<Clock> clocks;
 	float m_RotAngle;
 
 };

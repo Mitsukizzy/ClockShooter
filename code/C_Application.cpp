@@ -21,6 +21,12 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 
 	// Angle of rotation ranging from -90 to 90 with 0 pointing straight upwards
 	m_RotAngle = 0;
+
+	// Init two clocks
+	//Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight);
+	//Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight);
+	//clocks.push_back(c1);
+	//clocks.push_back(c2);		
 	
 	// FOR DEBUG
 	AllocConsole();
@@ -32,7 +38,7 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 
 C_Application::~C_Application()
 {
-
+	// Erase all projectiles and clocks
 }
 
 
@@ -93,6 +99,7 @@ void C_Application::UpdateProjectiles()
 	while ( iter != projectiles.end() )
 	{
 		(*iter).Update();
+		std::cout << "UPDATE" << std::endl;
 
 		// Delete projectile if off screen
 		if ( (*iter).CheckOffscreen(m_ScreenWidth, m_ScreenWidth) )
@@ -100,6 +107,13 @@ void C_Application::UpdateProjectiles()
 			iter = projectiles.erase(iter);
 		}
 	}
+
+	// Update clocks
+	//auto iter2 = clocks.begin();
+	//while ( iter2 != clocks.end() )
+	//{
+	//	( *iter2 ).Update();
+	//}
 }
 
 void C_Application::DrawCannonLine(int inX1, int inY1, int inX2, int inY2, double rot, unsigned int color)
