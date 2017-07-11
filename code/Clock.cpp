@@ -4,7 +4,7 @@
 #include <cstdlib> // for rand
 #include <utility> // for swap
 
-#define MAX_RADIUS 50
+#define MAX_RADIUS 50.0
 #define MAX_CLOCK_LIFE 5
 
 static const float k_PI = 3.1415926536f;
@@ -15,10 +15,10 @@ Clock::Clock(int screenWidth, int screenHeight, int livesLeft)
 	, m_Lives(livesLeft)
 {
 	// Determine radius based on lives remaining
-	m_Radius = (m_Lives == MAX_CLOCK_LIFE) ? MAX_RADIUS : MAX_RADIUS / (2 * (5 - m_Lives));
+	m_Radius = (m_Lives == MAX_CLOCK_LIFE) ? MAX_RADIUS : MAX_RADIUS / (2.0f * (5 - m_Lives));
 
 	// Pick a random speed and direction
-	m_Speed = rand() % 4 + 2;
+	m_Speed = RandomFromRange(2.0f, 4.0f);
 
 	int angle = rand() % 360;
 	m_Dir.x = sin(angle);
@@ -45,25 +45,6 @@ void Clock::Update()
 	DrawHand(sec , TimeType::sec);
 }
 
-void Clock::FindNewSpawnPosition(Vector2 prevPos)
-{
-	bool spawnInsidePrev = (m_Lives < MAX_CLOCK_LIFE);
-
-	if(spawnInsidePrev)
-	{
-		// Finds a random spawn within the area of the previous clock
-		float prevRadius = m_Radius * 2 + 10; 
-		m_Pos.x = RandomFromRange(max(0, prevPos.x - prevRadius), min(m_ScreenWidth - prevRadius, prevPos.x + prevRadius));
-		m_Pos.y = RandomFromRange(max(0, prevPos.y - prevRadius), min(m_ScreenHeight - prevRadius, prevPos.y + prevRadius));
-	}
-	else
-	{
-		// Finds a random spawn within screen bounds 
-		m_Pos.x = rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
-		m_Pos.y = rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
-	}
-}
-
 void Clock::ClearDraw()
 {
 	int d = m_Radius * 2;
@@ -72,7 +53,7 @@ void Clock::ClearDraw()
 
 void Clock::DrawSquare()
 {
-	int d = m_Radius * 2;	
+	float d = m_Radius * 2;	
 	DrawLine(m_Pos.x - m_Radius, m_Pos.y - m_Radius, m_Pos.x + m_Radius, m_Pos.y - m_Radius, GetRGB( 255, 0, 0 )); // Top
 	DrawLine(m_Pos.x + m_Radius, m_Pos.y - m_Radius, m_Pos.x + m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 0, 0 )); // Right
 	DrawLine(m_Pos.x - m_Radius, m_Pos.y + m_Radius, m_Pos.x + m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 0, 0 )); // Bottom
@@ -190,7 +171,7 @@ bool Clock::CheckClockCollision(Vector2 bPos, float bRadius)
 	return !noCollide;
 }
 
-// Line Segment-AABB Intersection Test
+// Line Segment-Box Intersection Test
 bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 {
 	Vector2 v_dir = tail - head;
@@ -229,8 +210,26 @@ bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 	return true;
 }
 
-// Helper function for FindNewSpawnPosition
-// Returns float between a and b
+void Clock::FindNewSpawnPosition(Vector2 prevPos)
+{
+	bool spawnInsidePrev = (m_Lives < MAX_CLOCK_LIFE);
+
+	if(spawnInsidePrev)
+	{
+		// Finds a random spawn within the area of the previous clock
+		float prevRadius = m_Radius * 2 + 10; 
+		m_Pos.x = RandomFromRange(max(0, prevPos.x - prevRadius), min(m_ScreenWidth - prevRadius, prevPos.x + prevRadius));
+		m_Pos.y = RandomFromRange(max(0, prevPos.y - prevRadius), min(m_ScreenHeight - prevRadius, prevPos.y + prevRadius));
+	}
+	else
+	{
+		// Finds a random spawn within screen bounds 
+		m_Pos.x = rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
+		m_Pos.y = rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
+	}
+}
+
+// Helper function: Returns float between a and b
 float Clock::RandomFromRange(float a, float b)
 {
 	float randomPos = (float) rand() / RAND_MAX;  // 0.0 to 1.0
