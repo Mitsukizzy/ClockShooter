@@ -17,8 +17,8 @@ public:
 	/// Tick is called on fix framerate (50fps)
 	void Tick(T_PressedKey pressedKeys);
 
-	void UpdateProjectiles();
-
+	void Update();
+	void SpawnClocks();
 	void DrawCannonLine(int inX1, int inY1, int inX2, int Y2, double rot, unsigned int color);
 
 	static const T_PressedKey s_KeyLeft  = 0x01;
@@ -38,6 +38,7 @@ private:
 
 	std::vector<Projectile> projectiles;
 	std::vector<Clock> clocks;
+	const float m_RotSpeed = 1.5f;
 	float m_RotAngle;
 
 };

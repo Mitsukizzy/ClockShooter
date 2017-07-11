@@ -7,30 +7,33 @@
 class Clock
 {
 public:
+	enum TimeType { hour, min, sec };
 
 	Clock(int screenWidth, int screenHeight);
 	~Clock();
 
 	void Update();
+	void ClearDraw();
+	void DrawSquare();
+	void DrawHand(int time, TimeType type);
+	void CustomizeHands(TimeType type, float &length, float &denom, unsigned int &color);
 
-	void DrawRing();
-	void DrawHour(int hour);
-	void DrawMinute(int min);
-	void CheckCollision();
+	void CheckWallCollision();
+	bool CheckHitCollision(Vector2 head, Vector2 tail);
+	bool GetIsAlive() { return m_isAlive; }
 
 private:
 
-	const int m_ScreenWidth;
-	const int m_ScreenHeight;
+	int m_ScreenWidth;
+	int m_ScreenHeight;
 
-	int m_LocX;
-	int m_LocY;
-	float m_Speed;
 
 	Vector2 m_Pos;		// Center point of the clock
 	Vector2 m_Dir;		// Direction the clock is moving
 
-	bool m_IsSmall;
+	float m_Speed;
+	float m_Radius;
+	bool m_isAlive;
 };
 
 #endif // #ifndef TEST_CLOCK_H

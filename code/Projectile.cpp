@@ -35,11 +35,11 @@ void Projectile::Update()
 	m_Head = m_Tail + m_Dir * LENGTH;
 
 	// Draw the projectile
-	DrawLine(m_Tail.x, m_Tail.y, m_Head.x, m_Head.y, GetRGB( 255, 255, 255 ));
+	DrawLine(m_Tail.x, m_Tail.y, m_Head.x, m_Head.y, GetRGB( 255, 255, 0 ));
 	//std::cout << m_X1 << ", " << m_Y1 << " | " << m_X2 << " , " << m_Y2  << std::endl;
 }
 
 bool Projectile::CheckOffscreen(const int screenWidth, const int screenHeight)
 {
-	return ( m_Head.x < 0 || m_Tail.x > screenWidth || m_Head.y < 0 || m_Tail.y > screenHeight );
+	return ( m_Tail.x < 0 || m_Tail.x > screenWidth || m_Tail.y < 0 || m_Tail.y > screenHeight );
 }
