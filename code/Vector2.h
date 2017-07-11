@@ -5,8 +5,7 @@
 #include <cmath>
 
 /*
-	My own quick Vector2 implementation. 
-	Intentionally omitted functions not needed for this test: Dot Product, Cross, Set, etc.
+	My own quick Vector2 implementation
 */
 
 class Vector2
@@ -21,13 +20,6 @@ public:
 
 	Vector2( float newX, float newY ):x(newX), y(newY)
 	{}
-
-	// Set all, useful after instantiation
-	void Set( float newX, float newY )
-	{
-		x = newX;
-		y = newY;
-	}
 
 	float LengthSq()
 	{
@@ -44,6 +36,11 @@ public:
 		float len = Length();
 		x /= len;
 		y /= len;
+	}
+
+	float Dot(const Vector2 b)
+	{
+		return ( x * b.x + y * b.y );
 	}
 
 	// OPERATOR OVERRIDES

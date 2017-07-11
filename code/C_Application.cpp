@@ -1,8 +1,6 @@
 #include "C_Application.h"
 #include "graphics.h"
 #include "time.h"
-#include <vector>	// for managing projectiles and clocks
-#include <ctime>	// for random clock position
 #include <iostream>
 
 static const float k_PI = 3.1415926536f;
@@ -19,6 +17,10 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 
 	// Angle of rotation ranging from -90 to 90 with 0 pointing straight upwards
 	m_RotAngle = 0;
+	m_RotSpeed = 2.0f;
+
+	// Cooldown time between projectile firing
+	m_Cooldown = 0.1f;
 
 	// Set random seed
 	std::srand(std::time(NULL));
@@ -31,6 +33,8 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 	freopen("CONIN$", "r",stdin);
 	freopen("CONOUT$", "w",stdout);
 	freopen("CONOUT$", "w",stderr);
+
+	m_CoolStart = std::clock();
 }
 
 
@@ -42,8 +46,6 @@ C_Application::~C_Application()
 
 void C_Application::Tick(T_PressedKey pressedKeys)
 {
-	// Sample tick
-
 	// Clear screen on cannon position
 	FillRect(m_CannonX-20, m_CannonY-5, 40, 50, GetRGB(0, 0, 0));
 
@@ -59,12 +61,16 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	}
 
 	float rotInRad = (float) m_RotAngle * k_PI / 180.0;
+	double duration = (std::clock() - m_CoolStart) / (double) CLOCKS_PER_SEC;
 
-	if(pressedKeys & s_KeySpace)
+	if((pressedKeys & s_KeySpace) && (duration > m_Cooldown))
 	{
 		// Fire projectile
 		Projectile p = Projectile(m_CannonX, m_CannonY, rotInRad);
 		projectiles.push_back(p);
+
+		// Reset cooldown timer
+		m_CoolStart = std::clock();
 	}
 
 	// Draw cannon
@@ -110,18 +116,30 @@ void C_Application::Update()
 		p++;
 	}
 
-	auto c = clocks.begin();
-	while (c != clocks.end())
+	for (size_t i = 0; i < clocks.size(); i++) 
 	{
 		// Remove any dead clocks
-		if(!(*c).GetIsAlive())
+		if(!clocks[i].GetIsAlive())
 		{
-			c = clocks.erase(c);
+			clocks.erase(clocks.begin()+i);
 			continue;
 		}
+
+		// Check for collisions with other clocks, excluding current one
+		std::vector<Clock> otherClocks = clocks;
+		otherClocks.erase(otherClocks.begin()+i);
+
+		for(auto &other : otherClocks)
+		{
+			if ( clocks[i].CheckClockCollision(other.GetPosition(), other.GetRadius()))
+			{
+				clocks[i].ReverseDirection();
+				other.ReverseDirection();
+			}
+		}
+
 		// Update alive clocks
-		(*c).Update();
-		c++;
+		clocks[i].Update();
 	}
 
 	// Create two small clocks for each large hit
@@ -140,8 +158,8 @@ void C_Application::Update()
 void C_Application::SpawnClocks(bool isSmall)
 {
 	Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
-	clocks.push_back(c1);
 	Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
+	clocks.push_back(c1);
 	clocks.push_back(c2);		
 }
 

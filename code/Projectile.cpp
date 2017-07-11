@@ -2,7 +2,7 @@
 #include "graphics.h"	// for DrawLine
 #include <iostream>	//REMOVE
 
-#define LENGTH 50
+#define LENGTH 40
 
 Projectile::Projectile(int locX, int locY, float rotAngle)
 {

@@ -2,7 +2,8 @@
 #define TEST_C_APPLICATION_H
 #include "Projectile.h"
 #include "Clock.h"
-#include <vector>
+#include <vector>   // for managing projectiles and clocks
+#include <ctime>	// for random clock position, clock_t type
 
 
 class C_Application
@@ -38,8 +39,11 @@ private:
 
 	std::vector<Projectile> projectiles;
 	std::vector<Clock> clocks;
-	const float m_RotSpeed = 1.5f;
+
+	float m_RotSpeed;
 	float m_RotAngle;
+	float m_Cooldown;
+	clock_t m_CoolStart;
 
 };
 

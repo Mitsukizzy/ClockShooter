@@ -115,22 +115,72 @@ void Clock::CustomizeHands(TimeType type, float &length, float &denom, unsigned 
 	}
 }
 
-void Clock::CheckWallCollision()
+void Clock::ReverseDirection()
 {
-	// If colliding with wall, reverse direction
-	if ((m_Pos.x - m_Radius < 0) || (m_Pos.x + m_Radius > m_ScreenWidth) )
-	{
-		m_Dir.x *= -1;
-	}
-	else if((m_Pos.y - m_Radius < 0) || (m_Pos.y + m_Radius > m_ScreenHeight))
-	{
-		m_Dir.y *= -1;
-	}
+	m_Dir.x *= -1;
+	m_Dir.y *= -1;
 }
 
+// Vector Reflection
+void Clock::CheckWallCollision()
+{	
+	// Order: Top Left, Top Right, Bottom Left, Bottom Right
+	Vector2 v_screenTL = Vector2(0, 0);
+	Vector2 v_screenTR = Vector2(m_ScreenWidth, 0);
+	Vector2 v_screenBL = Vector2(0, m_ScreenHeight);
+	Vector2 v_screenBR = Vector2(m_ScreenWidth, m_ScreenHeight);
+
+	Vector2 v_wall, v_wallNormal;
+	
+	if(m_Pos.x - m_Radius < 0) 
+	{
+		// Left wall
+		v_wall = v_screenTL - v_screenBL;
+		v_wall.Normalize();
+		v_wallNormal = Vector2(-v_wall.y, v_wall.x);
+	}
+	else if(m_Pos.x + m_Radius > m_ScreenWidth)	
+	{
+		// Right wall
+		v_wall = v_screenTR - v_screenBR;
+		v_wall.Normalize();
+		v_wallNormal = Vector2(-v_wall.y, v_wall.x);
+	}
+	else if(m_Pos.y - m_Radius < 0)
+	{
+		// Top wall
+		v_wall = v_screenTL - v_screenTR;
+		v_wall.Normalize();
+		v_wallNormal = Vector2(-v_wall.y, v_wall.x);
+
+	}
+	else if(m_Pos.y + m_Radius > m_ScreenHeight)
+	{
+		// Bottom wall
+		v_wall = v_screenBL - v_screenBR;
+		v_wall.Normalize();
+		v_wallNormal = Vector2(-v_wall.y, v_wall.x);
+	}
+
+	m_Dir = m_Dir - (v_wallNormal * 2) * m_Dir.Dot(v_wallNormal);
+	m_Dir.Normalize();
+}
+
+// AABB Collision Test
+bool Clock::CheckClockCollision(Vector2 bPos, float bRadius)
+{
+	Vector2	v_minA = Vector2(m_Pos.x - m_Radius, m_Pos.y - m_Radius);
+	Vector2	v_maxA = Vector2(m_Pos.x + m_Radius, m_Pos.y + m_Radius);
+	Vector2 v_minB = Vector2(bPos.x - bRadius, bPos.y - bRadius);
+	Vector2 v_maxB = Vector2(bPos.x + bRadius, bPos.y + bRadius);
+	bool noCollide = ( v_minA.x > v_maxB.x || v_minB.x > v_maxA.x
+					|| v_minA.y > v_maxB.y || v_minB.y > v_maxA.y );
+	return !noCollide;
+}
+
+// Line Segment-AABB Intersection Test
 bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 {
-	// Line Segment-AABB Intersection Test
 	Vector2 v_dir = tail - head;
 	Vector2 v_invDir = Vector2( 1.0f / v_dir.x, 1.0f / v_dir.y );
 	Vector2 v_boxMin = Vector2( m_Pos.x - m_Radius, m_Pos.y - m_Radius );
