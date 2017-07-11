@@ -24,9 +24,9 @@ public:
 	bool CheckHitCollision(Vector2 head, Vector2 tail);
 
 	Vector2 GetPosition() { return m_Pos; }
-	float GetRadius() { return m_Radius; }
-	bool GetIsAlive() { return m_isAlive; }
-	bool GetIsSmall() { return m_isSmall; }
+	float GetRadius()	  { return m_Radius; }
+	bool GetIsAlive()	  { return m_isAlive; }
+	bool GetIsSmall()     { return m_isSmall; }
 
 private:
 

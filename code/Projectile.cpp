@@ -1,6 +1,5 @@
 #include "Projectile.h"
 #include "graphics.h"	// for DrawLine
-#include <iostream>	//REMOVE
 
 #define LENGTH 40
 
@@ -12,13 +11,11 @@ Projectile::Projectile(int locX, int locY, float rotAngle)
 	m_Tail = m_Head;
 
 	// Set laser direction vector
-	m_Dir.x = sin( rotAngle );
-	m_Dir.y = -cos( rotAngle );
+	m_Dir.x = sin(rotAngle);
+	m_Dir.y = -cos(rotAngle);
 }
 
-Projectile::~Projectile()
-{
-}
+Projectile::~Projectile(){}
 
 void Projectile::Update()
 {
@@ -30,7 +27,6 @@ void Projectile::Update()
 
 	// Draw the projectile
 	DrawLine(m_Tail.x, m_Tail.y, m_Head.x, m_Head.y, GetRGB(255, 255, 0));
-	//std::cout << m_X1 << ", " << m_Y1 << " | " << m_X2 << " , " << m_Y2  << std::endl;
 }
 
 void Projectile::ClearDraw()

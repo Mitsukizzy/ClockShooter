@@ -1,7 +1,6 @@
 #include "C_Application.h"
 #include "graphics.h"
 #include "time.h"
-#include <iostream>
 
 static const float k_PI = 3.1415926536f;
 
@@ -21,26 +20,16 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 
 	// Cooldown time between projectile firing
 	m_Cooldown = 0.1f;
+	m_CoolStart = std::clock();
 
 	// Set random seed
 	std::srand(std::time(NULL));
 
 	// Init two big clocks
 	SpawnClocks(false);
-	
-	// FOR DEBUG
-	AllocConsole();
-	freopen("CONIN$", "r",stdin);
-	freopen("CONOUT$", "w",stdout);
-	freopen("CONOUT$", "w",stderr);
-
-	m_CoolStart = std::clock();
 }
 
-
-C_Application::~C_Application()
-{
-}
+C_Application::~C_Application(){}
 
 void C_Application::Tick(T_PressedKey pressedKeys)
 {
@@ -72,16 +61,16 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	}
 
 	// Draw cannon
-	DrawCannonLine( m_CannonX, m_CannonY, m_CannonX-10, m_CannonY+30, rotInRad, GetRGB( 255, 0, 0 ) );
-	DrawCannonLine( m_CannonX, m_CannonY, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB( 0, 255, 0 ) );
-	DrawCannonLine( m_CannonX-10, m_CannonY+30, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB( 0, 0, 255 ) );
+	DrawCannonLine(m_CannonX, m_CannonY, m_CannonX-10, m_CannonY+30, rotInRad, GetRGB(255, 0, 0));
+	DrawCannonLine(m_CannonX, m_CannonY, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB(0, 255, 0));
+	DrawCannonLine(m_CannonX-10, m_CannonY+30, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB(0, 0, 255));
 
 	Update();
 }
 
 void C_Application::Update()
 {
-	int lgClockHit = 0;
+	int lgClockHit = 0; 
 
 	auto p = projectiles.begin();
 	while(p != projectiles.end())

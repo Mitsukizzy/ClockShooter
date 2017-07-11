@@ -2,7 +2,7 @@
 #include "graphics.h"
 #include "time.h"
 #include <cstdlib> // for rand
-#include <iostream>
+#include <utility> // for swap
 
 #define LG_RADIUS 50
 #define SM_RADIUS 2.5
@@ -25,13 +25,11 @@ Clock::Clock(int screenWidth, int screenHeight, bool isSmall)
 	m_Speed = std::rand() % 4 + 2;
 
 	int angle = std::rand() % 360;
-	m_Dir.x = sin( angle );
-	m_Dir.y = -cos( angle );
+	m_Dir.x = sin(angle);
+	m_Dir.y = -cos(angle);
 }
 
-Clock::~Clock()
-{
-}
+Clock::~Clock(){}
 
 void Clock::Update()
 {
@@ -42,7 +40,7 @@ void Clock::Update()
 	m_Pos = m_Pos + m_Dir * m_Speed;
 
 	int hour, min, sec;
-	GetTime( hour, min, sec );
+	GetTime(hour, min, sec);
 
 	// Update draw
 	DrawSquare();
@@ -90,8 +88,8 @@ void Clock::DrawHand(int time, TimeType type)
 	angle = angle * k_PI / 180.0f;
 
 	// Set vector for clock hand using angle and length
-	v_hand.x = sin( angle );
-	v_hand.y = -cos( angle );
+	v_hand.x = sin(angle);
+	v_hand.y = -cos(angle);
 	v_hand = m_Pos + v_hand * length;
 
 	DrawLine(m_Pos.x, m_Pos.y, v_hand.x, v_hand.y, color);
@@ -187,9 +185,9 @@ bool Clock::CheckClockCollision(Vector2 bPos, float bRadius)
 bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 {
 	Vector2 v_dir = tail - head;
-	Vector2 v_invDir = Vector2( 1.0f / v_dir.x, 1.0f / v_dir.y );
-	Vector2 v_boxMin = Vector2( m_Pos.x - m_Radius, m_Pos.y - m_Radius );
-	Vector2 v_boxMax = Vector2( m_Pos.x + m_Radius, m_Pos.y + m_Radius );
+	Vector2 v_invDir = Vector2(1.0f / v_dir.x, 1.0f / v_dir.y);
+	Vector2 v_boxMin = Vector2(m_Pos.x - m_Radius, m_Pos.y - m_Radius);
+	Vector2 v_boxMax = Vector2(m_Pos.x + m_Radius, m_Pos.y + m_Radius);
 	float tMin = 0.0f;
 	float tMax = v_dir.Length();
 	float txMin, txMax, tyMin, tyMax;
@@ -199,7 +197,7 @@ bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 	txMin = (v_boxMin.x - tail.x) * v_invDir.x;
 	txMax = (v_boxMax.x - tail.x) * v_invDir.x;
 
-	if ( txMax < txMin ) std::swap( txMin, txMax );
+	if (txMax < txMin) std::swap(txMin, txMax);
 
 	tMin = max( tMin, txMin );
 	tMax = min( tMax, txMax );

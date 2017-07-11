@@ -1,10 +1,10 @@
 #ifndef TEST_C_APPLICATION_H
 #define TEST_C_APPLICATION_H
+
 #include "Projectile.h"
 #include "Clock.h"
 #include <vector>
 #include <ctime>	// for random clock position, clock_t type
-
 
 class C_Application
 {

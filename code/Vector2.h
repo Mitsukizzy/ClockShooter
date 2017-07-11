@@ -45,7 +45,6 @@ public:
 	}
 
 	// OPERATOR OVERRIDES
-	// friend keyword allows non-member functions to access private and protected memobers of a class
 	friend Vector2 operator&=( const Vector2 a, const Vector2 b )
 	{
 		return Vector2( b.x, b.y );
@@ -66,7 +65,7 @@ public:
 		return Vector2(a.x * b, a.y * b);
 	}
 
-}; // End Vector2 class
+}; 
 
 #endif // #ifndef TEST_VECTOR2_H
 #pragma once
