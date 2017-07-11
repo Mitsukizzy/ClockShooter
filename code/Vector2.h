@@ -5,7 +5,8 @@
 #include <cmath>
 
 /*
-	My own quick Vector2 implementation
+	My own quick Vector2 implementation.
+	Only added functions needed for the test.
 */
 
 class Vector2

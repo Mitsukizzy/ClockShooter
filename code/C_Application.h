@@ -2,7 +2,7 @@
 #define TEST_C_APPLICATION_H
 #include "Projectile.h"
 #include "Clock.h"
-#include <vector>   // for managing projectiles and clocks
+#include <vector>
 #include <ctime>	// for random clock position, clock_t type
 
 

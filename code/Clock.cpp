@@ -19,11 +19,10 @@ Clock::Clock(int screenWidth, int screenHeight, bool isSmall)
 	m_Radius = m_isSmall ? SM_RADIUS : LG_RADIUS;
 
 	// Spawn in a random location on screen
-	m_Pos.x = std::rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
-	m_Pos.y = std::rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
+	FindNewSpawnPosition();
 
 	// Pick a random speed and direction
-	m_Speed = std::rand() % 5 + 1;
+	m_Speed = std::rand() % 4 + 2;
 
 	int angle = std::rand() % 360;
 	m_Dir.x = sin( angle );
@@ -52,10 +51,16 @@ void Clock::Update()
 	DrawHand(sec , TimeType::sec);
 }
 
+void Clock::FindNewSpawnPosition()
+{
+	m_Pos.x = std::rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
+	m_Pos.y = std::rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
+}
+
 void Clock::ClearDraw()
 {
 	int d = m_Radius * 2;
-	FillRect(m_Pos.x - m_Radius, m_Pos.y - m_Radius, d+1, d+1, GetRGB(0, 0, 0));
+	FillRect(m_Pos.x-m_Radius-1, m_Pos.y-m_Radius-1, d+2, d+2, GetRGB(0, 0, 0));
 }
 
 void Clock::DrawSquare()

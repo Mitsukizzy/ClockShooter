@@ -17,7 +17,7 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 
 	// Angle of rotation ranging from -90 to 90 with 0 pointing straight upwards
 	m_RotAngle = 0;
-	m_RotSpeed = 2.0f;
+	m_RotSpeed = 1.5f;
 
 	// Cooldown time between projectile firing
 	m_Cooldown = 0.1f;
@@ -40,9 +40,7 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 
 C_Application::~C_Application()
 {
-	// Erase all projectiles and clocks
 }
-
 
 void C_Application::Tick(T_PressedKey pressedKeys)
 {
@@ -131,7 +129,7 @@ void C_Application::Update()
 
 		for(auto &other : otherClocks)
 		{
-			if ( clocks[i].CheckClockCollision(other.GetPosition(), other.GetRadius()))
+			if (clocks[i].CheckClockCollision(other.GetPosition(), other.GetRadius()))
 			{
 				clocks[i].ReverseDirection();
 				other.ReverseDirection();
@@ -155,12 +153,24 @@ void C_Application::Update()
 	}
 }
 
+// Spawns two clocks in random locations
 void C_Application::SpawnClocks(bool isSmall)
 {
-	Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
-	Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
-	clocks.push_back(c1);
-	clocks.push_back(c2);		
+	for(int n = 0; n < 2 ; n++)
+	{
+		Clock c = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
+		for (size_t i = 0; i < clocks.size(); i++) 
+		{
+			// If spawned on another clock, pick a new location
+			// Set index back to 0 to ensure new location is valid
+			if(clocks[i].CheckClockCollision(c.GetPosition(), c.GetRadius()))
+			{
+				c.FindNewSpawnPosition();
+				i = 0; 
+			}
+		}
+		clocks.push_back(c);
+	}	
 }
 
 // Draws the individual lines that form the cannon based on the rotation around the cannon's midpoint

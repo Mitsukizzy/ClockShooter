@@ -13,6 +13,7 @@ public:
 	~Clock();
 
 	void Update();
+	void FindNewSpawnPosition();
 	void ClearDraw();
 	void DrawSquare();
 	void DrawHand(int time, TimeType type);
@@ -31,7 +32,6 @@ private:
 
 	int m_ScreenWidth;
 	int m_ScreenHeight;
-
 
 	Vector2 m_Pos;		// Center point of the clock
 	Vector2 m_Dir;		// Direction the clock is moving
