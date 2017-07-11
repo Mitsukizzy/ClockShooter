@@ -1,8 +1,13 @@
 #pragma once
-#ifndef TEST_UTILS_H
-#define TEST_UTILS_H
+#ifndef TEST_VECTOR2_H
+#define TEST_VECTOR2_H
 
 #include <cmath>
+
+/*
+	My own quick Vector2 implementation. 
+	Intentionally omitted functions not needed for this test: Dot Product, Cross, Set, etc.
+*/
 
 class Vector2
 {
@@ -41,19 +46,6 @@ public:
 		y /= len;
 	}
 
-	Vector2 Normalize( const Vector2 v )
-	{
-		Vector2 vNorm = v;
-		vNorm.Normalize();
-		return vNorm;
-	}
-
-
-	float Dot( const Vector2 a, const Vector2 b )
-	{
-		return ( a.x * b.x + a.y * b.y );
-	}
-
 	// OPERATOR OVERRIDES
 	// friend keyword allows non-member functions to access private and protected memobers of a class
 	friend Vector2 operator&=( const Vector2 a, const Vector2 b )
@@ -71,11 +63,6 @@ public:
 		return Vector2( a.x - b.x, a.y - b.y);
 	}
 
-	friend Vector2 operator*( const Vector2 a, const Vector2 b )
-	{
-		return Vector2( a.x * b.x, a.y * b.y);
-	}
-
 	friend Vector2 operator*( const Vector2 a, const float b )
 	{
 		return Vector2(a.x * b, a.y * b);
@@ -83,5 +70,5 @@ public:
 
 }; // End Vector2 class
 
-#endif // #ifndef TEST_UTILS_H
+#endif // #ifndef TEST_VECTOR2_H
 #pragma once

@@ -2,14 +2,14 @@
 #ifndef TEST_CLOCK_H
 #define TEST_CLOCK_H
 
-#include "Utils.h"
+#include "Vector2.h"
 
 class Clock
 {
 public:
 	enum TimeType { hour, min, sec };
 
-	Clock(int screenWidth, int screenHeight);
+	Clock(int screenWidth, int screenHeight, bool isSmall);
 	~Clock();
 
 	void Update();
@@ -21,6 +21,7 @@ public:
 	void CheckWallCollision();
 	bool CheckHitCollision(Vector2 head, Vector2 tail);
 	bool GetIsAlive() { return m_isAlive; }
+	bool GetIsSmall() { return m_isSmall; }
 
 private:
 
@@ -34,6 +35,7 @@ private:
 	float m_Speed;
 	float m_Radius;
 	bool m_isAlive;
+	bool m_isSmall;
 };
 
 #endif // #ifndef TEST_CLOCK_H

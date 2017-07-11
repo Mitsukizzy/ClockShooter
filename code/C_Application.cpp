@@ -1,8 +1,8 @@
 #include "C_Application.h"
 #include "graphics.h"
 #include "time.h"
-#include <math.h> // for cos and sin
-#include <vector>
+#include <vector>	// for managing projectiles and clocks
+#include <ctime>	// for random clock position
 #include <iostream>
 
 static const float k_PI = 3.1415926536f;
@@ -20,8 +20,11 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 	// Angle of rotation ranging from -90 to 90 with 0 pointing straight upwards
 	m_RotAngle = 0;
 
-	// Init two clocks
-	SpawnClocks();
+	// Set random seed
+	std::srand(std::time(NULL));
+
+	// Init two big clocks
+	SpawnClocks(false);
 	
 	// FOR DEBUG
 	AllocConsole();
@@ -47,37 +50,22 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	// Key processing
 	if(pressedKeys & s_KeyLeft)
 	{
-		//m_CannonX = max(0, m_CannonX-4);
 		m_RotAngle = max(-90.0f, m_RotAngle - m_RotSpeed);
 	}
 
 	if(pressedKeys & s_KeyRight)
 	{
-		//m_CannonX = min(m_ScreenWidth, m_CannonX+4);
 		m_RotAngle = min(90.0f, m_RotAngle + m_RotSpeed);
 	}
 
-	if(pressedKeys & s_KeyUp)
-	{
-		m_CannonY = max(0, m_CannonY-4);
-	}
-
-	if(pressedKeys & s_KeyDown)
-	{
-		m_CannonY = min(m_ScreenHeight, m_CannonY+4);
-	}
-
-	//std::cout << "DEGRot: " << m_RotAngle << std::endl;
 	float rotInRad = (float) m_RotAngle * k_PI / 180.0;
 
 	if(pressedKeys & s_KeySpace)
 	{
 		// Fire projectile
 		Projectile p = Projectile(m_CannonX, m_CannonY, rotInRad);
-		projectiles.push_back(p);		
-		//std::cout << "PROJECTILE COUNT: " << projectiles.size() << std::endl;
+		projectiles.push_back(p);
 	}
-
 
 	// Draw cannon
 	DrawCannonLine( m_CannonX, m_CannonY, m_CannonX-10, m_CannonY+30, rotInRad, GetRGB( 255, 0, 0 ) );
@@ -87,20 +75,27 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	Update();
 }
 
-
 void C_Application::Update()
 {
-	// Update projectiles
+	int lgClockHit = 0;
+
 	auto p = projectiles.begin();
 	while(p != projectiles.end())
 	{
 		bool hit, offScreen;
+
+		// Update projectiles
 		(*p).Update();
 		
 		// Check if projectile hit a clock
 		for(auto &clock : clocks)
 		{
 			hit = clock.CheckHitCollision((*p).GetHead(), (*p).GetTail());
+
+			if(hit && !clock.GetIsSmall()) 
+			{
+				lgClockHit++;
+			}
 		}
 
 		offScreen = (*p).CheckOffscreen(m_ScreenWidth, m_ScreenWidth);
@@ -108,6 +103,7 @@ void C_Application::Update()
 		// Destroy projectile if hit or off screen
 		if(hit || offScreen) 
 		{
+			(*p).ClearDraw();
 			p = projectiles.erase(p);
 			continue;
 		}
@@ -123,27 +119,33 @@ void C_Application::Update()
 			c = clocks.erase(c);
 			continue;
 		}
-
 		// Update alive clocks
 		(*c).Update();
 		c++;
 	}
 
-	// Create two new clocks if none exist
+	// Create two small clocks for each large hit
+	for(int i = 0; i < lgClockHit; i++)
+	{
+		SpawnClocks(true);
+	}
+
+	// Create two large clocks if none exist
 	if(clocks.size() == 0)
 	{
-		SpawnClocks();
+		SpawnClocks(false);
 	}
 }
 
-void C_Application::SpawnClocks()
+void C_Application::SpawnClocks(bool isSmall)
 {
-	Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight);
-	Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight);
+	Clock c1 = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
 	clocks.push_back(c1);
+	Clock c2 = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
 	clocks.push_back(c2);		
 }
 
+// Draws the individual lines that form the cannon based on the rotation around the cannon's midpoint
 void C_Application::DrawCannonLine(int inX1, int inY1, int inX2, int inY2, double rot, unsigned int color)
 {
 	float anchorX = m_CannonX;

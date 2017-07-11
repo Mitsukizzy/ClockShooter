@@ -1,29 +1,26 @@
 #include "Clock.h"
 #include "graphics.h"
 #include "time.h"
-#include <math.h> // for cos and sin
 #include <cstdlib> // for rand
 #include <iostream>
-#include <ctime>       /* time */
 
 #define LG_RADIUS 50
 #define SM_RADIUS 2.5
 
 static const float k_PI = 3.1415926536f;
 
-Clock::Clock(int screenWidth, int screenHeight)
+Clock::Clock(int screenWidth, int screenHeight, bool isSmall)
 	: m_ScreenWidth(screenWidth)
 	, m_ScreenHeight(screenHeight)
+	, m_isSmall(isSmall)
 {
-	std::srand(std::time(0));
 	m_isAlive = true;
 
-	// Spawn in a random location on screen
-	m_Pos.x = std::rand() % (m_ScreenWidth - LG_RADIUS*2) + LG_RADIUS;
-	m_Pos.y = std::rand() % (m_ScreenHeight - LG_RADIUS*2) + LG_RADIUS;
+	m_Radius = m_isSmall ? SM_RADIUS : LG_RADIUS;
 
-	// Starts as a large clock
-	m_Radius = LG_RADIUS;
+	// Spawn in a random location on screen
+	m_Pos.x = std::rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
+	m_Pos.y = std::rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
 
 	// Pick a random speed and direction
 	m_Speed = std::rand() % 5 + 1;
@@ -35,7 +32,6 @@ Clock::Clock(int screenWidth, int screenHeight)
 
 Clock::~Clock()
 {
-	ClearDraw();
 }
 
 void Clock::Update()
@@ -166,19 +162,7 @@ bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 	if(tMin > tMax) return false;
 
 	// Clock has been hit by projectile
-	if (m_Radius == LG_RADIUS)
-	{
-		ClearDraw();
-		m_Radius = SM_RADIUS;
-
-		// Head in a new direction
-		int angle = std::rand() % 360;
-		m_Dir.x = sin( angle );
-		m_Dir.y = -cos( angle );
-	}
-	else
-	{
-		m_isAlive = false;
-	}
+	m_isAlive = false;
+	ClearDraw();
 	return true;
 }
