@@ -19,17 +19,17 @@ public:
 	Vector2():x(0.0f), y(0.0f)
 	{}
 
-	Vector2( float newX, float newY ):x(newX), y(newY)
+	Vector2(float newX, float newY):x(newX), y(newY)
 	{}
 
 	float LengthSq()
 	{
-		return ( x * x + y * y );
+		return (x * x + y * y);
 	}
 
 	float Length()
 	{
-		return sqrtf( LengthSq() );
+		return sqrtf(LengthSq());
 	}
 
 	void Normalize()
@@ -41,26 +41,26 @@ public:
 
 	float Dot(const Vector2 b)
 	{
-		return ( x * b.x + y * b.y );
+		return (x * b.x + y * b.y);
 	}
 
 	// OPERATOR OVERRIDES
-	friend Vector2 operator&=( const Vector2 a, const Vector2 b )
+	friend Vector2 operator&=(const Vector2 a, const Vector2 b)
 	{
 		return Vector2( b.x, b.y );
 	}
 
-	friend Vector2 operator+( const Vector2 a, const Vector2 b )
+	friend Vector2 operator+(const Vector2 a, const Vector2 b)
 	{
-		return Vector2( a.x + b.x, a.y + b.y );
+		return Vector2(a.x + b.x, a.y + b.y);
 	}
 
-	friend Vector2 operator-( const Vector2 a, const Vector2 b )
+	friend Vector2 operator-(const Vector2 a, const Vector2 b)
 	{
-		return Vector2( a.x - b.x, a.y - b.y);
+		return Vector2(a.x - b.x, a.y - b.y);
 	}
 
-	friend Vector2 operator*( const Vector2 a, const float b )
+	friend Vector2 operator*(const Vector2 a, const float b)
 	{
 		return Vector2(a.x * b, a.y * b);
 	}

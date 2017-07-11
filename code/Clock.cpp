@@ -14,15 +14,13 @@ Clock::Clock(int screenWidth, int screenHeight, int livesLeft)
 	, m_ScreenHeight(screenHeight)
 	, m_Lives(livesLeft)
 {
+	// Determine radius based on lives remaining
 	m_Radius = (m_Lives == MAX_CLOCK_LIFE) ? MAX_RADIUS : MAX_RADIUS / (2 * (5 - m_Lives));
 
-	// Spawn in a random location on screen
-	FindNewSpawnPosition();
-
 	// Pick a random speed and direction
-	m_Speed = std::rand() % 4 + 2;
+	m_Speed = rand() % 4 + 2;
 
-	int angle = std::rand() % 360;
+	int angle = rand() % 360;
 	m_Dir.x = sin(angle);
 	m_Dir.y = -cos(angle);
 }
@@ -47,10 +45,23 @@ void Clock::Update()
 	DrawHand(sec , TimeType::sec);
 }
 
-void Clock::FindNewSpawnPosition()
+void Clock::FindNewSpawnPosition(Vector2 prevPos)
 {
-	m_Pos.x = std::rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
-	m_Pos.y = std::rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
+	bool spawnInsidePrev = (m_Lives < MAX_CLOCK_LIFE);
+
+	if(spawnInsidePrev)
+	{
+		// Finds a random spawn within the area of the previous clock
+		float prevRadius = m_Radius * 2 + 10; 
+		m_Pos.x = RandomFromRange(max(0, prevPos.x - prevRadius), min(m_ScreenWidth - prevRadius, prevPos.x + prevRadius));
+		m_Pos.y = RandomFromRange(max(0, prevPos.y - prevRadius), min(m_ScreenHeight - prevRadius, prevPos.y + prevRadius));
+	}
+	else
+	{
+		// Finds a random spawn within screen bounds 
+		m_Pos.x = rand() % (int)(m_ScreenWidth  - m_Radius*2) + m_Radius;
+		m_Pos.y = rand() % (int)(m_ScreenHeight - m_Radius*2) + m_Radius;
+	}
 }
 
 void Clock::ClearDraw()
@@ -216,4 +227,13 @@ bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 	m_Lives--;
 	ClearDraw();
 	return true;
+}
+
+// Helper function for FindNewSpawnPosition
+// Returns float between a and b
+float Clock::RandomFromRange(float a, float b)
+{
+	float randomPos = (float) rand() / RAND_MAX;  // 0.0 to 1.0
+	randomPos *= (b - a);
+	return a + randomPos;
 }

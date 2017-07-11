@@ -13,7 +13,7 @@ public:
 	~Clock();
 
 	void Update();
-	void FindNewSpawnPosition();
+	void FindNewSpawnPosition(Vector2 prevPos);
 	void ClearDraw();
 	void DrawSquare();
 	void DrawHand(int time, TimeType type);
@@ -22,6 +22,7 @@ public:
 	void CheckWallCollision();
 	bool CheckClockCollision(Vector2 bPos, float bRadius);
 	bool CheckHitCollision(Vector2 head, Vector2 tail);
+	float RandomFromRange(float a, float b);
 
 	Vector2 GetPosition() { return m_Pos; }
 	int GetLives()		  { return m_Lives; }

@@ -72,6 +72,7 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 void C_Application::Update()
 {
 	std::vector<int> clockSpawns;
+	std::vector<Vector2> spawnPos;
 
 	auto p = projectiles.begin();
 	while(p != projectiles.end())
@@ -94,6 +95,7 @@ void C_Application::Update()
 				if((*c).GetLives() > 0)
 				{
 					clockSpawns.push_back((*c).GetLives());
+					spawnPos.push_back((*c).GetPosition());
 				}
 				c = clocks.erase(c);
 				continue;
@@ -135,7 +137,7 @@ void C_Application::Update()
 	// Spawn new clocks 
 	for(int i = 0; i < clockSpawns.size(); i++)
 	{
- 		SpawnClocks(clockSpawns[i]);
+ 		SpawnClocks(clockSpawns[i], spawnPos[i]);
 	}
 
 	// Create two large clocks if none exist
@@ -145,19 +147,21 @@ void C_Application::Update()
 	}
 }
 
-// Spawns two clocks in random locations
-void C_Application::SpawnClocks(int livesLeft)
+// Spawns two clocks, gives previous position a default value if clock has max lives
+void C_Application::SpawnClocks(int livesLeft, Vector2 prevPos)
 {
 	for(int n = 0; n < 2 ; n++)
 	{
 		Clock c = Clock(m_ScreenWidth, m_ScreenHeight, livesLeft);
+		c.FindNewSpawnPosition(prevPos);
+
 		for (size_t i = 0; i < clocks.size(); i++) 
 		{
 			// If spawned on another clock, pick a new location
 			// Set index back to 0 to ensure new location is valid
 			if(clocks[i].CheckClockCollision(c.GetPosition(), c.GetRadius()))
 			{
-				c.FindNewSpawnPosition();
+				c.FindNewSpawnPosition(prevPos);
 				i = 0; 
 			}
 		}
