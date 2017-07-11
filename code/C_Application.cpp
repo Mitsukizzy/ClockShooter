@@ -3,6 +3,7 @@
 #include "time.h"
 
 static const float k_PI = 3.1415926536f;
+#define MAX_CLOCK_LIFE 5
 
 C_Application::C_Application(int screenWidth, int screenHeight)
 	: m_ScreenWidth(screenWidth)
@@ -19,14 +20,14 @@ C_Application::C_Application(int screenWidth, int screenHeight)
 	m_RotSpeed = 1.5f;
 
 	// Cooldown time between projectile firing
-	m_Cooldown = 0.1f;
+	m_Cooldown = 0.02f;
 	m_CoolStart = std::clock();
 
 	// Set random seed
 	std::srand(std::time(NULL));
 
 	// Init two big clocks
-	SpawnClocks(false);
+	SpawnClocks(MAX_CLOCK_LIFE);
 }
 
 C_Application::~C_Application(){}
@@ -34,7 +35,7 @@ C_Application::~C_Application(){}
 void C_Application::Tick(T_PressedKey pressedKeys)
 {
 	// Clear screen on cannon position
-	FillRect(m_CannonX-20, m_CannonY-5, 40, 50, GetRGB(0, 0, 0));
+	FillRect(m_CannonX-30, m_CannonY, 61, 50, GetRGB(0, 0, 0));
 
 	// Key processing
 	if(pressedKeys & s_KeyLeft)
@@ -61,8 +62,8 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 	}
 
 	// Draw cannon
-	DrawCannonLine(m_CannonX, m_CannonY, m_CannonX-10, m_CannonY+30, rotInRad, GetRGB(255, 0, 0));
-	DrawCannonLine(m_CannonX, m_CannonY, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB(0, 255, 0));
+	DrawCannonLine(m_CannonX, m_CannonY, m_CannonX-10, m_CannonY+30, rotInRad, GetRGB(0, 0, 255));
+	DrawCannonLine(m_CannonX, m_CannonY, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB(0, 0, 255));
 	DrawCannonLine(m_CannonX-10, m_CannonY+30, m_CannonX+10, m_CannonY+30, rotInRad, GetRGB(0, 0, 255));
 
 	Update();
@@ -70,25 +71,34 @@ void C_Application::Tick(T_PressedKey pressedKeys)
 
 void C_Application::Update()
 {
-	int lgClockHit = 0; 
+	std::vector<int> clockSpawns;
 
 	auto p = projectiles.begin();
 	while(p != projectiles.end())
 	{
-		bool hit, offScreen;
+		bool hit = false;
+		bool offScreen = false;
 
 		// Update projectiles
 		(*p).Update();
 		
 		// Check if projectile hit a clock
-		for(auto &clock : clocks)
+		auto c = clocks.begin();
+		while(c != clocks.end())
 		{
-			hit = clock.CheckHitCollision((*p).GetHead(), (*p).GetTail());
+			hit = (*c).CheckHitCollision((*p).GetHead(), (*p).GetTail());
 
-			if(hit && !clock.GetIsSmall()) 
+			// Remove any hit clocks, keep track of what to spawn
+			if(hit) 
 			{
-				lgClockHit++;
+				if((*c).GetLives() > 0)
+				{
+					clockSpawns.push_back((*c).GetLives());
+				}
+				c = clocks.erase(c);
+				continue;
 			}
+			c++;
 		}
 
 		offScreen = (*p).CheckOffscreen(m_ScreenWidth, m_ScreenWidth);
@@ -105,13 +115,6 @@ void C_Application::Update()
 
 	for (size_t i = 0; i < clocks.size(); i++) 
 	{
-		// Remove any dead clocks
-		if(!clocks[i].GetIsAlive())
-		{
-			clocks.erase(clocks.begin()+i);
-			continue;
-		}
-
 		// Check for collisions with other clocks, excluding current one
 		std::vector<Clock> otherClocks = clocks;
 		otherClocks.erase(otherClocks.begin()+i);
@@ -125,29 +128,29 @@ void C_Application::Update()
 			}
 		}
 
-		// Update alive clocks
+		// Update clocks
 		clocks[i].Update();
 	}
 
-	// Create two small clocks for each large hit
-	for(int i = 0; i < lgClockHit; i++)
+	// Spawn new clocks 
+	for(int i = 0; i < clockSpawns.size(); i++)
 	{
-		SpawnClocks(true);
+ 		SpawnClocks(clockSpawns[i]);
 	}
 
 	// Create two large clocks if none exist
 	if(clocks.size() == 0)
 	{
-		SpawnClocks(false);
+		SpawnClocks(MAX_CLOCK_LIFE);
 	}
 }
 
 // Spawns two clocks in random locations
-void C_Application::SpawnClocks(bool isSmall)
+void C_Application::SpawnClocks(int livesLeft)
 {
 	for(int n = 0; n < 2 ; n++)
 	{
-		Clock c = Clock(m_ScreenWidth, m_ScreenHeight, isSmall);
+		Clock c = Clock(m_ScreenWidth, m_ScreenHeight, livesLeft);
 		for (size_t i = 0; i < clocks.size(); i++) 
 		{
 			// If spawned on another clock, pick a new location
@@ -162,11 +165,11 @@ void C_Application::SpawnClocks(bool isSmall)
 	}	
 }
 
-// Draws the individual lines that form the cannon based on the rotation around the cannon's midpoint
+// Draws the individual lines that form the cannon based on the rotation about the cannon's bottom middle point
 void C_Application::DrawCannonLine(int inX1, int inY1, int inX2, int inY2, double rot, unsigned int color)
 {
 	float anchorX = m_CannonX;
-	float anchorY = m_CannonY+15;
+	float anchorY = m_CannonY+30;
 
 	float anchoredX1 = inX1 - anchorX;
 	float anchoredY1 = inY1 - anchorY;

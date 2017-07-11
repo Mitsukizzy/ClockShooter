@@ -4,19 +4,17 @@
 #include <cstdlib> // for rand
 #include <utility> // for swap
 
-#define LG_RADIUS 50
-#define SM_RADIUS 2.5
+#define MAX_RADIUS 50
+#define MAX_CLOCK_LIFE 5
 
 static const float k_PI = 3.1415926536f;
 
-Clock::Clock(int screenWidth, int screenHeight, bool isSmall)
+Clock::Clock(int screenWidth, int screenHeight, int livesLeft)
 	: m_ScreenWidth(screenWidth)
 	, m_ScreenHeight(screenHeight)
-	, m_isSmall(isSmall)
+	, m_Lives(livesLeft)
 {
-	m_isAlive = true;
-
-	m_Radius = m_isSmall ? SM_RADIUS : LG_RADIUS;
+	m_Radius = (m_Lives == MAX_CLOCK_LIFE) ? MAX_RADIUS : MAX_RADIUS / (2 * (5 - m_Lives));
 
 	// Spawn in a random location on screen
 	FindNewSpawnPosition();
@@ -58,16 +56,16 @@ void Clock::FindNewSpawnPosition()
 void Clock::ClearDraw()
 {
 	int d = m_Radius * 2;
-	FillRect(m_Pos.x-m_Radius-1, m_Pos.y-m_Radius-1, d+2, d+2, GetRGB(0, 0, 0));
+	FillRect(m_Pos.x-m_Radius-2, m_Pos.y-m_Radius-2, d+4, d+4, GetRGB(0, 0, 0));
 }
 
 void Clock::DrawSquare()
 {
 	int d = m_Radius * 2;	
-	DrawLine(m_Pos.x - m_Radius, m_Pos.y - m_Radius, m_Pos.x + m_Radius, m_Pos.y - m_Radius, GetRGB( 255, 255, 255 )); // Top
-	DrawLine(m_Pos.x + m_Radius, m_Pos.y - m_Radius, m_Pos.x + m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 255, 255 )); // Right
-	DrawLine(m_Pos.x - m_Radius, m_Pos.y + m_Radius, m_Pos.x + m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 255, 255 )); // Bottom
-	DrawLine(m_Pos.x - m_Radius, m_Pos.y - m_Radius, m_Pos.x - m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 255, 255 )); // Left
+	DrawLine(m_Pos.x - m_Radius, m_Pos.y - m_Radius, m_Pos.x + m_Radius, m_Pos.y - m_Radius, GetRGB( 255, 0, 0 )); // Top
+	DrawLine(m_Pos.x + m_Radius, m_Pos.y - m_Radius, m_Pos.x + m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 0, 0 )); // Right
+	DrawLine(m_Pos.x - m_Radius, m_Pos.y + m_Radius, m_Pos.x + m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 0, 0 )); // Bottom
+	DrawLine(m_Pos.x - m_Radius, m_Pos.y - m_Radius, m_Pos.x - m_Radius, m_Pos.y + m_Radius, GetRGB( 255, 0, 0 )); // Left
 }
 
 void Clock::DrawHand(int time, TimeType type)
@@ -215,7 +213,7 @@ bool Clock::CheckHitCollision(Vector2 head, Vector2 tail)
 	if(tMin > tMax) return false;
 
 	// Clock has been hit by projectile
-	m_isAlive = false;
+	m_Lives--;
 	ClearDraw();
 	return true;
 }

@@ -19,7 +19,7 @@ public:
 	void Tick(T_PressedKey pressedKeys);
 
 	void Update();
-	void SpawnClocks(bool isSmall);
+	void SpawnClocks(int livesLeft);
 	void DrawCannonLine(int inX1, int inY1, int inX2, int Y2, double rot, unsigned int color);
 
 	static const T_PressedKey s_KeyLeft  = 0x01;

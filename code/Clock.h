@@ -9,7 +9,7 @@ class Clock
 public:
 	enum TimeType { hour, min, sec };
 
-	Clock(int screenWidth, int screenHeight, bool isSmall);
+	Clock(int screenWidth, int screenHeight, int livesLeft);
 	~Clock();
 
 	void Update();
@@ -24,9 +24,8 @@ public:
 	bool CheckHitCollision(Vector2 head, Vector2 tail);
 
 	Vector2 GetPosition() { return m_Pos; }
+	int GetLives()		  { return m_Lives; }
 	float GetRadius()	  { return m_Radius; }
-	bool GetIsAlive()	  { return m_isAlive; }
-	bool GetIsSmall()     { return m_isSmall; }
 
 private:
 
@@ -36,10 +35,9 @@ private:
 	Vector2 m_Pos;		// Center point of the clock
 	Vector2 m_Dir;		// Direction the clock is moving
 
+	int m_Lives;
 	float m_Speed;
 	float m_Radius;
-	bool m_isAlive;
-	bool m_isSmall;
 };
 
 #endif // #ifndef TEST_CLOCK_H
